@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auberge d'Anthy — Hôtel Restaurant au bord du Léman</title>
+  <meta name="description" content="Établissement familial depuis 1927 à Anthy-sur-Léman. Restaurant gastronomique lacustre, filets de perche frais, 12 chambres authentiques.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --couleur-profond:   #1a2b2e;   /* bleu-noir lacustre */
+      --couleur-ombre:     #2c4a4e;   /* vert sombre du lac */
+      --couleur-pierre:    #8a7a6a;   /* pierre savoyarde */
+      --couleur-sable:     #e8e0d4;   /* sable chaud */
+      --couleur-creme:     #f5f2ec;   /* crème ivoire */
+      --couleur-or:        #b8966e;   /* or mat */
+      --couleur-blanc:     #ffffff;
+
+      --fonte-serif:  'Cormorant Garamond', Georgia, serif;
+      --fonte-sans:   'Jost', 'Helvetica Neue', sans-serif;
+
+      --espace-xs: 0.5rem;
+      --espace-s:  1rem;
+      --espace-m:  2rem;
+      --espace-l:  4rem;
+      --espace-xl: 8rem;
+
+      --transition: 240ms ease;
+      --radius: 2px;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--fonte-sans);
+      background-color: var(--couleur-creme);
+      color: var(--couleur-profond);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-in-left {
+      opacity: 0;
+      transform: translateX(-32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in-left.visible { opacity: 1; transform: translateX(0); }
+    .fade-in-right {
+      opacity: 0;
+      transform: translateX(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-in-right.visible { opacity: 1; transform: translateX(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade-in, .fade-in-left, .fade-in-right {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* ===== NAVIGATION ===== */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: transparent;
+      transition: background var(--transition), backdrop-filter var(--transition), padding var(--transition);
+    }
+    .nav.scrolled {
+      background: rgba(26, 43, 46, 0.96);
+      backdrop-filter: blur(12px);
+      padding: 0.85rem 2.5rem;
+    }
+
+    .nav-logo {
+      font-family: var(--fonte-serif);
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+    }
+    .nav-logo span {
+      display: block;
+      font-size: 0.65rem;
+      font-family: var(--fonte-sans);
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--fonte-sans);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--couleur-or); }
+
+    .nav-cta {
+      font-family: var(--fonte-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--couleur-blanc) !important;
+      border: 1px solid var(--couleur-or);
+      padding: 0.55rem 1.4rem;
+      transition: background var(--transition), color var(--transition) !important;
+    }
+    .nav-cta:hover {
+      background: var(--couleur-or);
+      color: var(--couleur-profond) !important;
+    }
+
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-burger span {
+      display: block;
+      width: 26px;
+      height: 1.5px;
+      background: var(--couleur-blanc);
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1800&auto=format&fit=crop&q=85');
+      background-size: cover;
+      background-position: center 40%;
+      transform: scale(1.05);
+      transition: transform 12s ease-out;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(26,43,46,0.35) 0%,
+        rgba(26,43,46,0.55) 60%,
+        rgba(26,43,46,0.8) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 1.5rem;
+      max-width: 800px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--fonte-sans);
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-titre {
+      font-family: var(--fonte-serif);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      line-height: 1.05;
+      margin-bottom: 1.25rem;
+    }
+    .hero-titre em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--couleur-or);
+    }
+
+    .hero-sous-titre {
+      font-family: var(--fonte-sans);
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.78);
+      letter-spacing: 0.04em;
+      margin-bottom: 2.75rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primaire {
+      display: inline-block;
+      font-family: var(--fonte-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--couleur-profond);
+      background: var(--couleur-or);
+      padding: 1rem 2.25rem;
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+    .btn-primaire:hover {
+      background: #c9a87f;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondaire {
+      display: inline-block;
+      font-family: var(--fonte-sans);
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--couleur-blanc);
+      border: 1px solid rgba(255,255,255,0.5);
+      padding: 1rem 2.25rem;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .btn-secondaire:hover {
+      border-color: var(--couleur-or);
+      background: rgba(184,150,110,0.15);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .hero-scroll span {
+      font-family: var(--fonte-sans);
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.5), transparent);
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDown {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-line { animation: none; opacity: 0.4; }
+    }
+
+    /* ===== SECTION IDENTITÉ ===== */
+    .section-identite {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 520px;
+    }
+
+    .identite-visuel {
+      position: relative;
+      overflow: hidden;
+    }
+    .identite-visuel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    .identite-visuel:hover img { transform: scale(1.04); }
+
+    .identite-annee {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-family: var(--fonte-serif);
+      font-size: 5rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.15);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .identite-contenu {
+      background: var(--couleur-profond);
+      padding: var(--espace-xl) var(--espace-l);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .label-section {
+      font-family: var(--fonte-sans);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      margin-bottom: 1.25rem;
+    }
+
+    .identite-titre {
+      font-family: var(--fonte-serif);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+    .identite-titre em {
+      font-style: italic;
+      color: var(--couleur-or);
+    }
+
+    .identite-texte {
+      font-family: var(--fonte-sans);
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .identite-ligne {
+      width: 48px;
+      height: 1px;
+      background: var(--couleur-or);
+    }
+
+    /* ===== SECTION RESTAURANT ===== */
+    .section-restaurant {
+      padding: var(--espace-xl) var(--espace-m);
+      background: var(--couleur-creme);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-entete {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-titre {
+      font-family: var(--fonte-serif);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      color: var(--couleur-profond);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .section-titre em {
+      font-style: italic;
+      color: var(--couleur-pierre);
+    }
+
+    .section-sous-titre {
+      font-family: var(--fonte-sans);
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--couleur-pierre);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* Carrousel */
+    .carrousel-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      margin-bottom: 3rem;
+    }
+
+    .carrousel-piste {
+      display: flex;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .carrousel-piste { transition: none; }
+    }
+
+    .carrousel-diapo {
+      min-width: 100%;
+      position: relative;
+    }
+
+    .carrousel-diapo img {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+    }
+
+    .carrousel-legende {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 2.5rem 2rem 2rem;
+      background: linear-gradient(transparent, rgba(26,43,46,0.85));
+    }
+
+    .carrousel-legende h3 {
+      font-family: var(--fonte-serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      margin-bottom: 0.4rem;
+    }
+
+    .carrousel-legende p {
+      font-family: var(--fonte-sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.04em;
+    }
+
+    .carrousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 0;
+      width: 100%;
+      justify-content: space-between;
+      padding: 0 1rem;
+      pointer-events: none;
+    }
+
+    .carrousel-btn {
+      pointer-events: all;
+      background: rgba(26,43,46,0.6);
+      border: 1px solid rgba(184,150,110,0.4);
+      color: var(--couleur-blanc);
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .carrousel-btn:hover {
+      background: var(--couleur-or);
+      border-color: var(--couleur-or);
+    }
+    .carrousel-btn svg { width: 18px; height: 18px; }
+
+    .carrousel-points {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .carrousel-point {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--couleur-pierre);
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+    .carrousel-point.actif {
+      background: var(--couleur-or);
+      transform: scale(1.35);
+    }
+
+    /* Spécialités */
+    .specialites-grille {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    .specialite-carte {
+      background: var(--couleur-blanc);
+      padding: 2rem 1.75rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .specialite-carte:hover {
+      border-bottom-color: var(--couleur-or);
+      box-shadow: 0 8px 32px rgba(26,43,46,0.08);
+    }
+
+    .specialite-icone {
+      width: 36px;
+      height: 36px;
+      color: var(--couleur-or);
+      margin-bottom: 1.25rem;
+    }
+
+    .specialite-titre {
+      font-family: var(--fonte-serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--couleur-profond);
+      margin-bottom: 0.75rem;
+    }
+
+    .specialite-desc {
+      font-family: var(--fonte-sans);
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--couleur-pierre);
+      line-height: 1.75;
+    }
+
+    /* ===== MENUS & TARIFS ===== */
+    .section-menus {
+      background: var(--couleur-profond);
+      padding: var(--espace-xl) var(--espace-m);
+    }
+
+    .menus-grille {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .menu-carte {
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      transition: border-color var(--transition);
+    }
+    .menu-carte:hover { border-color: var(--couleur-or); }
+
+    .menu-carte.vedette {
+      border-color: var(--couleur-or);
+      background: rgba(184,150,110,0.08);
+    }
+
+    .menu-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--couleur-or);
+      color: var(--couleur-profond);
+      font-family: var(--fonte-sans);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.3rem 1rem;
+    }
+
+    .menu-nom {
+      font-family: var(--fonte-serif);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      margin-bottom: 0.5rem;
+    }
+
+    .menu-lieu {
+      font-family: var(--fonte-sans);
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      margin-bottom: 1.5rem;
+    }
+
+    .menu-prix {
+      font-family: var(--fonte-serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+    .menu-prix sup {
+      font-size: 1.2rem;
+      vertical-align: super;
+    }
+
+    .menu-unite {
+      font-family: var(--fonte-sans);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 1.75rem;
+      letter-spacing: 0.08em;
+    }
+
+    .menu-details {
+      list-style: none;
+      text-align: left;
+    }
+    .menu-details li {
+      font-family: var(--fonte-sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .menu-details li::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      background: var(--couleur-or);
+      flex-shrink: 0;
+    }
+
+    /* ===== CHAMBRES ===== */
+    .section-chambres {
+      padding: var(--espace-xl) var(--espace-m);
+      background: var(--couleur-creme);
+    }
+
+    .chambres-grille {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      margin-top: 3.5rem;
+    }
+
+    .chambre-item {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+    }
+    .chambre-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .chambre-item:hover img { transform: scale(1.06); }
+
+    .chambre-info {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(26,43,46,0.88) 100%);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transition: background var(--transition);
+    }
+    .chambre-item:hover .chambre-info {
+      background: linear-gradient(180deg, transparent 20%, rgba(26,43,46,0.92) 100%);
+    }
+
+    .chambre-tag {
+      font-family: var(--fonte-sans);
+      font-size: 0.62rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      margin-bottom: 0.5rem;
+    }
+
+    .chambre-titre {
+      font-family: var(--fonte-serif);
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      margin-bottom: 0.5rem;
+    }
+
+    .chambre-desc {
+      font-family: var(--fonte-sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+      opacity: 0;
+    }
+    .chambre-item:hover .chambre-desc {
+      max-height: 80px;
+      opacity: 1;
+    }
+
+    .chambre-grand {
+      grid-column: span 2;
+      min-height: 340px;
+    }
+    .chambre-grand img { max-height: 340px; width: 100%; object-fit: cover; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .chambre-item img, .chambre-info { transition: none; }
+      .chambre-item:hover .chambre-desc { max-height: 80px; opacity: 1; }
+    }
+
+    /* Services chambre */
+    .services-liste {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2.5rem;
+      justify-content: center;
+    }
+
+    .service-puce {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--fonte-sans);
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--couleur-pierre);
+    }
+    .service-puce svg {
+      width: 18px;
+      height: 18px;
+      color: var(--couleur-or);
+      flex-shrink: 0;
+    }
+
+    /* ===== SECTION LOCALISATION ===== */
+    .section-localisation {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 480px;
+    }
+
+    .localisation-carte {
+      position: relative;
+      overflow: hidden;
+    }
+    .localisation-carte img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .localisation-contenu {
+      background: var(--couleur-ombre);
+      padding: var(--espace-l) var(--espace-l);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .contact-bloc {
+      margin-top: 2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      color: rgba(255,255,255,0.82);
+    }
+    .contact-item svg {
+      width: 20px;
+      height: 20px;
+      color: var(--couleur-or);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-label {
+      font-family: var(--fonte-sans);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-valeur {
+      font-family: var(--fonte-sans);
+      font-size: 0.92rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.55;
+    }
+
+    .horaires-grille {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .horaire-ligne {
+      font-family: var(--fonte-sans);
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+    }
+    .horaire-ligne strong {
+      font-weight: 400;
+      color: rgba(255,255,255,0.85);
+      display: block;
+    }
+
+    /* ===== SECTION ÉVÉNEMENTS ===== */
+    .section-evenements {
+      padding: var(--espace-xl) var(--espace-m);
+      background: var(--couleur-blanc);
+    }
+
+    .evenements-grille {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    .evenement-carte {
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+    }
+    .evenement-carte img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+    .evenement-carte:hover img { transform: scale(1.08); }
+
+    .evenement-info {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem 1.75rem;
+      background: linear-gradient(transparent 30%, rgba(26,43,46,0.85) 100%);
+    }
+
+    .evenement-titre {
+      font-family: var(--fonte-serif);
+      font-size: 1.45rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      margin-bottom: 0.4rem;
+    }
+
+    .evenement-desc {
+      font-family: var(--fonte-sans);
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+    }
+
+    /* ===== CTA RÉSERVATION ===== */
+    .section-cta {
+      padding: var(--espace-xl) var(--espace-m);
+      background: var(--couleur-profond);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.12;
+      background-image: url('https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1400&auto=format&fit=crop&q=70');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .cta-contenu { position: relative; z-index: 1; }
+
+    .cta-titre {
+      font-family: var(--fonte-serif);
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      margin-bottom: 1rem;
+    }
+    .cta-titre em { font-style: italic; color: var(--couleur-or); }
+
+    .cta-texte {
+      font-family: var(--fonte-sans);
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.75;
+    }
+
+    .cta-contacts {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .cta-contact-item {
+      text-align: center;
+    }
+    .cta-contact-label {
+      font-family: var(--fonte-sans);
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--couleur-or);
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .cta-contact-valeur {
+      font-family: var(--fonte-serif);
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #0f1a1c;
+      padding: 2.5rem var(--espace-m);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: var(--fonte-serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-liens {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-liens a {
+      font-family: var(--fonte-sans);
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.35);
+      transition: color var(--transition);
+    }
+    .footer-liens a:hover { color: var(--couleur-or); }
+
+    .footer-copy {
+      font-family: var(--fonte-sans);
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.06em;
+    }
+
+    /* ===== MENTION HORIZONIA ===== */
+    .mention-horizonia {
+      position: fixed;
+      bottom: 1.25rem;
+      left: 1.25rem;
+      z-index: 200;
+      font-family: var(--fonte-sans);
+      font-size: 0.62rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.55);
+      background: rgba(26,43,46,0.75);
+      backdrop-filter: blur(8px);
+      padding: 0.4rem 0.85rem;
+      border-left: 1.5px solid var(--couleur-or);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      :root {
+        --espace-l: 2.5rem;
+        --espace-xl: 5rem;
+      }
+
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+      .nav-cta-desktop { display: none; }
+
+      .section-identite { grid-template-columns: 1fr; }
+      .identite-visuel { min-height: 300px; }
+
+      .specialites-grille { grid-template-columns: 1fr; }
+      .menus-grille { grid-template-columns: 1fr; gap: 1rem; }
+      .chambres-grille { grid-template-columns: 1fr; }
+      .chambre-grand { grid-column: span 1; }
+      .section-localisation { grid-template-columns: 1fr; }
+      .localisation-carte { min-height: 280px; }
+      .evenements-grille { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .nav { padding: 1rem 1.25rem; }
+      .nav.scrolled { padding: 0.75rem 1.25rem; }
+
+      .hero-titre { font-size: 2.6rem; }
+      .hero-actions { flex-direction: column; align-items: center; }
+
+      .carrousel-diapo img { height: 320px; }
+
+      .section-cta .cta-contacts { gap: 2rem; }
+
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-liens { justify-content: center; }
+
+      .mention-horizonia { font-size: 0.58rem; }
+    }
+
+    /* ===== MOBILE NAV OVERLAY ===== */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--couleur-profond);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+    .nav-mobile.ouvert { display: flex; }
+
+    .nav-mobile a {
+      font-family: var(--fonte-serif);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--couleur-blanc);
+      letter-spacing: 0.04em;
+      transition: color var(--transition);
+    }
+    .nav-mobile a:hover { color: var(--couleur-or); }
+    .nav-mobile-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Navigation principale">
+    <a href="#accueil" class="nav-logo" aria-label="Auberge d'Anthy - accueil">
+      Auberge d'Anthy
+      <span>Hôtel Restaurant · Depuis 1927</span>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#restaurant">Restaurant</a></li>
+      <li><a href="#menus">Menus</a></li>
+      <li><a href="#chambres">Chambres</a></li>
+      <li><a href="#evenements">Événements</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:+33450703500" class="nav-cta nav-cta-desktop" aria-label="Réserver par téléphone">Réserver</a></li>
+    </ul>
+
+    <button class="nav-burger" id="navBurger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- MENU MOBILE -->
+  <div class="nav-mobile" id="navMobile" role="dialog" aria-modal="true" aria-label="Menu de navigation">
+    <button class="nav-mobile-close" id="navClose" aria-label="Fermer le menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <a href="#restaurant" onclick="fermerMenu()">Restaurant</a>
+    <a href="#menus" onclick="fermerMenu()">Menus</a>
+    <a href="#chambres" onclick="fermerMenu()">Chambres</a>
+    <a href="#evenements" onclick="fermerMenu()">Événements</a>
+    <a href="#contact" onclick="fermerMenu()">Contact</a>
+    <a href="tel:+33450703500" class="btn-primaire" style="font-size:0.78rem; padding:0.9rem 2rem;">04 50 70 35 00</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="accueil" aria-label="Présentation de l'Auberge d'Anthy">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow fade-in">Anthy-sur-Léman · Haute-Savoie · Depuis 1927</p>
+      <h1 class="hero-titre fade-in" style="transition-delay:0.1s">
+        L'Auberge<br><em>d'Anthy</em>
+      </h1>
+      <p class="hero-sous-titre fade-in" style="transition-delay:0.2s">
+        Une adresse familiale au bord du Léman. Cuisine lacustre d'exception, filets de perche frais et 12 chambres authentiques au cœur de la Savoie.
+      </p>
+      <div class="hero-actions fade-in" style="transition-delay:0.3s">
+        <a href="tel:+33450703500" class="btn-primaire">Réserver une table</a>
+        <a href="#restaurant" class="btn-secondaire">Découvrir</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Défiler</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- SECTION IDENTITÉ -->
+  <section class="section-identite" aria-label="Notre histoire">
+    <div class="identite-visuel">
+      <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=900&auto=format&fit=crop&q=80"
+           alt="Le lac Léman au coucher du soleil, vue depuis Anthy-sur-Léman"
+           loading="lazy">
+      <div class="identite-annee" aria-hidden="true">1927</div>
+    </div>
+
+    <div class="identite-contenu">
+      <p class="label-section fade-in-right">Notre histoire</p>
+      <h2 class="identite-titre fade-in-right" style="transition-delay:0.1s">
+        Une auberge familiale<br><em>au fil du Léman</em>
+      </h2>
+      <p class="identite-texte fade-in-right" style="transition-delay:0.2s">
+        Établie depuis 1927, l'Auberge d'Anthy perpétue l'art de recevoir dans une maison chaleureuse et sincère. À quelques pas du lac, nous célébrons les saveurs du Léman : filets de perche pêchés chaque matin, féras et ombles-chevaliers, charcuteries savoyardes et fromages d'alpage.
+      </p>
+      <p class="identite-texte fade-in-right" style="transition-delay:0.25s">
+        Quatre générations d'hospitalité dans un cadre où l'authenticité n'est pas un décor, mais une façon d'être.
+      </p>
+      <div class="identite-ligne fade-in-right" style="transition-delay:0.3s"></div>
+    </div>
+  </section>
+
+  <!-- SECTION RESTAURANT / CARROUSEL -->
+  <section class="section-restaurant" id="restaurant" aria-label="Notre restaurant">
+    <div class="container">
+      <div class="section-entete">
+        <p class="label-section fade-in">La table</p>
+        <h2 class="section-titre fade-in" style="transition-delay:0.1s">
+          Une cuisine <em>du lac et des sommets</em>
+        </h2>
+        <p class="section-sous-titre fade-in" style="transition-delay:0.2s">
+          Le restaurant propose une carte ancrée dans les saisons et le terroir. Les poissons arrivent directement du Léman, les légumes des maraîchers voisins, le fromage des alpages de Savoie.
+        </p>
+      </div>
+
+      <!-- CARROUSEL -->
+      <div class="carrousel-container fade-in" role="region" aria-label="Galerie du restaurant" aria-live="polite">
+        <div class="carrousel-piste" id="carrouselPiste">
+
+          <div class="carrousel-diapo" role="group" aria-label="Photo 1 sur 5">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&auto=format&fit=crop&q=80"
+                 alt="Salle du restaurant gastronomique de l'Auberge d'Anthy"
+                 loading="lazy">
+            <div class="carrousel-legende">
+              <h3>La salle du restaurant</h3>
+              <p>Un cadre chaleureux et intime pour une cuisine de saison</p>
+            </div>
+          </div>
+
+          <div class="carrousel-diapo" role="group" aria-label="Photo 2 sur 5">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&auto=format&fit=crop&q=80"
+                 alt="Filets de perche frais du lac Léman, spécialité de l'Auberge d'Anthy"
+                 loading="lazy">
+            <div class="carrousel-legende">
+              <h3>Filets de perche du Léman</h3>
+              <p>La spécialité maison : pêche locale, préparation soignée</p>
+            </div>
+          </div>
+
+          <div class="carrousel-diapo" role="group" aria-label="Photo 3 sur 5">
+            <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1200&auto=format&fit=crop&q=80"
+                 alt="Cuisine savoyarde raffinée préparée en salle"
+                 loading="lazy">
+            <div class="carrousel-legende">
+              <h3>Saveurs de Savoie</h3>
+              <p>Foie gras, soufflé au fromage d'Abondance, charcuteries artisanales</p>
+            </div>
+          </div>
+
+          <div class="carrousel-diapo" role="group" aria-label="Photo 4 sur 5">
+            <img src="https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1200&auto=format&fit=crop&q=80"
+                 alt="Terrasse de l'auberge avec vue sur le lac Léman"
+                 loading="lazy">
+            <div class="carrousel-legende">
+              <h3>Le Bistrot</h3>
+              <p>Formules légères du midi dans une atmosphère décontractée</p>
+            </div>
+          </div>
+
+          <div class="carrousel-diapo" role="group" aria-label="Photo 5 sur 5">
+            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&auto=format&fit=crop&q=80"
+                 alt="Vue panoramique du lac Léman depuis Anthy"
+                 loading="lazy">
+            <div class="carrousel-legende">
+              <h3>Le cadre du Léman</h3>
+              <p>Un panorama exceptionnel à deux pas de la salle</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Navigation carrousel -->
+        <div class="carrousel-nav" aria-label="Navigation du carrousel">
+          <button class="carrousel-btn" id="carrouselPrev" aria-label="Image précédente">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button class="carrousel-btn" id="carrouselNext" aria-label="Image suivante">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Points carrousel -->
+      <div class="carrousel-points" role="tablist" aria-label="Sélectionner une image" id="carrouselPoints"></div>
+
+      <!-- Spécialités -->
+      <div class="specialites-grille">
+        <div class="specialite-carte fade-in">
+          <svg class="specialite-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M12 2C8 2 4 5.5 4 10c0 5.5 8 12 8 12s8-6.5 8-12c0-4.5-4-8-8-8z"/>
+            <circle cx="12" cy="10" r="2.5"/>
+          </svg>
+          <h3 class="specialite-titre">Poissons du Léman</h3>
+          <p class="specialite-desc">Filets de perche frais, féras, truites et ombles-chevaliers pêchés chaque matin dans les eaux du lac. La richesse du Léman dans l'assiette.</p>
+        </div>
+
+        <div class="specialite-carte fade-in" style="transition-delay:0.1s">
+          <svg class="specialite-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M3 17H21M5 17V7a2 2 0 012-2h10a2 2 0 012 2v10M9 11h6"/>
+          </svg>
+          <h3 class="specialite-titre">Terroir savoyard</h3>
+          <p class="specialite-desc">Soufflé au fromage d'Abondance, foie gras maison, charcuteries artisanales et produits des alpages : les saveurs authentiques de la Savoie.</p>
+        </div>
+
+        <div class="specialite-carte fade-in" style="transition-delay:0.2s">
+          <svg class="specialite-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M8 3H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-2"/>
+            <rect x="8" y="1" width="8" height="4" rx="1"/>
+            <line x1="9" y1="13" x2="15" y2="13"/>
+            <line x1="9" y1="9" x2="15" y2="9"/>
+          </svg>
+          <h3 class="specialite-titre">Cuisine de saison</h3>
+          <p class="specialite-desc">Une carte renouvelée au fil des saisons, en harmonie avec les producteurs locaux. Le menu du jour à 27 € reflète le meilleur du marché.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION MENUS & TARIFS -->
+  <section class="section-menus" id="menus" aria-label="Nos menus et tarifs">
+    <div class="container">
+      <div class="section-entete">
+        <p class="label-section fade-in" style="color: var(--couleur-or);">La carte</p>
+        <h2 class="section-titre fade-in" style="color: var(--couleur-blanc); transition-delay:0.1s">
+          Formules & <em style="color: var(--couleur-or);">menus</em>
+        </h2>
+        <p class="section-sous-titre fade-in" style="transition-delay:0.2s; color: rgba(255,255,255,0.5);">
+          Du déjeuner décontracté au repas gastronomique, chaque moment mérite sa formule.
+        </p>
+      </div>
+
+      <div class="menus-grille">
+
+        <div class="menu-carte fade-in">
+          <p class="menu-nom">Le Bistrot</p>
+          <p class="menu-lieu">Déjeuner · Mar–Dim</p>
+          <p class="menu-prix"><sup>à partir de </sup>15<sup>€</sup></p>
+          <p class="menu-unite">par personne</p>
+          <ul class="menu-details">
+            <li>Plat du jour dès 15 €</li>
+            <li>Formule 2 plats à 23 €</li>
+            <li>Service dès 7h en semaine</li>
+            <li>Dès 7h30 le week-end</li>
+          </ul>
+        </div>
+
+        <div class="menu-carte vedette fade-in" style="transition-delay:0.1s">
+          <div class="menu-badge">Recommandé</div>
+          <p class="menu-nom">Menu du jour</p>
+          <p class="menu-lieu">Restaurant · Mer–Dim midi</p>
+          <p class="menu-prix">27<sup>€</sup></p>
+          <p class="menu-unite">par personne</p>
+          <ul class="menu-details">
+            <li>Entrée + plat + dessert</li>
+            <li>Poissons du lac</li>
+            <li>Produits de saison</li>
+            <li>Fromages savoyards</li>
+          </ul>
+        </div>
+
+        <div class="menu-carte fade-in" style="transition-delay:0.2s">
+          <p class="menu-nom">Spécialités</p>
+          <p class="menu-lieu">Ven–Sam midi uniquement</p>
+          <p class="menu-prix">30<sup>€</sup></p>
+          <p class="menu-unite">par personne</p>
+          <ul class="menu-details">
+            <li>Filets de perche du Léman</li>
+            <li>Féras et ombles-chevaliers</li>
+            <li>Foie gras &amp; soufflé Abondance</li>
+            <li>Carte des vins savoyards</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION CHAMBRES -->
+  <section class="section-chambres" id="chambres" aria-label="Nos chambres">
+    <div class="container">
+      <div class="section-entete">
+        <p class="label-section fade-in">L'hébergement</p>
+        <h2 class="section-titre fade-in" style="transition-delay:0.1s">
+          12 chambres <em>authentiques</em>
+        </h2>
+        <p class="section-sous-titre fade-in" style="transition-delay:0.2s">
+          Des chambres chaleureuses et confortables dans un cadre familial, idéales pour prolonger votre séjour au bord du Léman.
+        </p>
+      </div>
+
+      <div class="chambres-grille fade-in" style="transition-delay:0.1s">
+
+        <div class="chambre-item">
+          <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&auto=format&fit=crop&q=80"
+               alt="Chambre confortable à l'Auberge d'Anthy"
+               loading="lazy">
+          <div class="chambre-info">
+            <span class="chambre-tag">Confort</span>
+            <h3 class="chambre-titre">Chambres doubles</h3>
+            <p class="chambre-desc">Décoration chaleureuse, literie de qualité, salle de bain privative. Vue sur le jardin ou la rue.</p>
+          </div>
+        </div>
+
+        <div class="chambre-item">
+          <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&auto=format&fit=crop&q=80"
+               alt="Vue sur le lac Léman depuis l'Auberge d'Anthy"
+               loading="lazy">
+          <div class="chambre-info">
+            <span class="chambre-tag">Séjour étendu</span>
+            <h3 class="chambre-titre">Vue sur la nature</h3>
+            <p class="chambre-desc">Profitez du calme de la Savoie, à deux pas des rives du Léman et des sentiers de randonnée.</p>
+          </div>
+        </div>
+
+        <div class="chambre-item chambre-grand">
+          <img src="https://images.unsplash.com/photo-1476124369491-e7addf5db371?w=1400&auto=format&fit=crop&q=80"
+               alt="Panorama du lac Léman depuis Anthy-sur-Léman"
+               loading="lazy"
+               style="max-height:340px; width:100%; object-fit:cover;">
+          <div class="chambre-info">
+            <span class="chambre-tag">L'environnement</span>
+            <h3 class="chambre-titre">Au bord du Léman</h3>
+            <p class="chambre-desc">Anthy-sur-Léman, un village authentique à quelques mètres du lac, entre Thonon et la frontière suisse.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="services-liste fade-in" style="margin-top:2.5rem; transition-delay:0.2s" aria-label="Services inclus">
+        <div class="service-puce">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 6l5 5 5-6 5 6 5-5"/><path d="M1 6v12a1 1 0 001 1h20a1 1 0 001-1V6"/></svg>
+          WiFi gratuit
+        </div>
+        <div class="service-puce">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1" y="3" width="22" height="13" rx="2"/><path d="M9 21h6m-3-5v5"/></svg>
+          Petit-déjeuner sur réservation
+        </div>
+        <div class="service-puce">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Parking gratuit
+        </div>
+        <div class="service-puce">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Animaux acceptés
+        </div>
+        <div class="service-puce">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0M12 3v9l4 4"/></svg>
+          Local à vélos
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:2.5rem" class="fade-in">
+        <a href="tel:+33450703500" class="btn-primaire" style="color:var(--couleur-creme); background:var(--couleur-profond);">
+          Demander une réservation — Sur devis
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCALISATION & CONTACT -->
+  <section class="section-localisation" id="contact" aria-label="Localisation et contact">
+    <div class="localisation-carte">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80"
+           alt="Vue aérienne du lac Léman et de la Haute-Savoie"
+           loading="lazy">
+    </div>
+
+    <div class="localisation-contenu">
+      <p class="label-section fade-in-right" style="color: var(--couleur-or);">Nous trouver</p>
+      <h2 class="section-titre fade-in-right" style="color: var(--couleur-blanc); font-size: 2rem; transition-delay:0.1s">
+        Anthy-sur-Léman,<br><em style="color: var(--couleur-or);">Haute-Savoie</em>
+      </h2>
+
+      <div class="contact-bloc">
+
+        <div class="contact-item fade-in-right" style="transition-delay:0.15s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div>
+            <span class="contact-label">Adresse</span>
+            <p class="contact-valeur">2 rue des Écoles<br>74200 Anthy-sur-Léman</p>
+          </div>
+        </div>
+
+        <div class="contact-item fade-in-right" style="transition-delay:0.2s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013 5.18 2 2 0 015 3h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.09 10.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 17z"/>
+          </svg>
+          <div>
+            <span class="contact-label">Téléphone</span>
+            <a href="tel:+33450703500" class="contact-valeur" style="color: rgba(255,255,255,0.82);">04 50 70 35 00</a>
+          </div>
+        </div>
+
+        <div class="contact-item fade-in-right" style="transition-delay:0.25s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <div>
+            <span class="contact-label">Email</span>
+            <a href="mailto:contact@auberge-anthy.com" class="contact-valeur" style="color: rgba(255,255,255,0.82);">contact@auberge-anthy.com</a>
+          </div>
+        </div>
+
+        <div class="contact-item fade-in-right" style="transition-delay:0.3s">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <div>
+            <span class="contact-label">Horaires</span>
+            <div class="horaires-grille">
+              <div class="horaire-ligne">
+                <strong>Restaurant</strong>
+                Mer–Dim midi<br>Mar–Sam soir
+              </div>
+              <div class="horaire-ligne">
+                <strong>Le Bistrot</strong>
+                Mar–Dim dès 7h<br>Week-end dès 7h30
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION ÉVÉNEMENTS -->
+  <section class="section-evenements" id="evenements" aria-label="Événements et séminaires">
+    <div class="container">
+      <div class="section-entete">
+        <p class="label-section fade-in">Occasions spéciales</p>
+        <h2 class="section-titre fade-in" style="transition-delay:0.1s">
+          Mariages, séminaires &amp; <em>réceptions</em>
+        </h2>
+        <p class="section-sous-titre fade-in" style="transition-delay:0.2s">
+          L'Auberge d'Anthy met son cadre et son savoir-faire au service de vos événements les plus importants.
+        </p>
+      </div>
+
+      <div class="evenements-grille">
+
+        <div class="evenement-carte fade-in">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&auto=format&fit=crop&q=80"
+               alt="Réception et repas de mariage à l'Auberge d'Anthy"
+               loading="lazy">
+          <div class="evenement-info">
+            <h3 class="evenement-titre">Mariages &amp; célébrations</h3>
+            <p class="evenement-desc">Un cadre intimiste au bord du Léman pour les moments les plus précieux.</p>
+          </div>
+        </div>
+
+        <div class="evenement-carte fade-in" style="transition-delay:0.1s">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=700&auto=format&fit=crop&q=80"
+               alt="Séminaire d'entreprise avec repas gastronomique"
+               loading="lazy">
+          <div class="evenement-info">
+            <h3 class="evenement-titre">Séminaires d'entreprise</h3>
+            <p class="evenement-desc">Réunions professionnelles dans un environnement propice à la créativité et aux échanges.</p>
+          </div>
+        </div>
+
+        <div class="evenement-carte fade-in" style="transition-delay:0.2s">
+          <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?w=700&auto=format&fit=crop&q=80"
+               alt="Repas en famille et réceptions privées"
+               loading="lazy">
+          <div class="evenement-info">
+            <h3 class="evenement-titre">Réceptions privées</h3>
+            <p class="evenement-desc">Anniversaires, baptêmes, réunions de famille : chaque occasion mérite une table d'exception.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA RÉSERVATION -->
+  <section class="section-cta" aria-label="Réserver une table ou une chambre">
+    <div class="cta-bg" aria-hidden="true"></div>
+    <div class="cta-contenu container">
+      <p class="label-section fade-in" style="color:var(--couleur-or);">Nous rejoindre</p>
+      <h2 class="cta-titre fade-in" style="transition-delay:0.1s">
+        Réservez votre <em>table</em><br>ou votre <em>séjour</em>
+      </h2>
+      <p class="cta-texte fade-in" style="transition-delay:0.2s">
+        Pour une table au restaurant, une nuit dans nos chambres ou l'organisation d'un événement, notre équipe vous répond avec plaisir.
+      </p>
+      <div class="fade-in" style="transition-delay:0.3s">
+        <a href="tel:+33450703500" class="btn-primaire" style="font-size:0.8rem; padding:1.1rem 2.75rem;">
+          04 50 70 35 00
+        </a>
+      </div>
+
+      <div class="cta-contacts fade-in" style="transition-delay:0.4s">
+        <div class="cta-contact-item">
+          <span class="cta-contact-label">Adresse</span>
+          <span class="cta-contact-valeur">2 rue des Écoles · 74200 Anthy-sur-Léman</span>
+        </div>
+        <div class="cta-contact-item">
+          <span class="cta-contact-label">Email</span>
+          <span class="cta-contact-valeur">contact@auberge-anthy.com</span>
+        </div>
+        <div class="cta-contact-item">
+          <span class="cta-contact-label">Parking &amp; vélos</span>
+          <span class="cta-contact-valeur">Gratuits — local à vélos disponible</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-inner">
+      <p class="footer-logo">Auberge d'Anthy · Depuis 1927</p>
+      <ul class="footer-liens" role="list">
+        <li><a href="#restaurant">Restaurant</a></li>
+        <li><a href="#chambres">Chambres</a></li>
+        <li><a href="#evenements">Événements</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <p class="footer-copy">&copy; 2024 Auberge d'Anthy · 2 rue des Écoles · 74200 Anthy-sur-Léman</p>
+    </div>
+  </footer>
+
+  <!-- MENTION HORIZON IA -->
+  <div class="mention-horizonia" role="note">Site de démonstration réalisé par Horizon IA</div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // ===== NAVIGATION SCROLL =====
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ===== HERO BG ANIMATION =====
+    window.addEventListener('load', () => {
+      document.getElementById('heroBg').classList.add('loaded');
+    });
+
+    // ===== ANIMATIONS SCROLL =====
+    const observerOptions = {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Rendre visibles les éléments du hero immédiatement
+    document.querySelectorAll('.hero .fade-in').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 100);
+    });
+
+    // ===== CARROUSEL =====
+    const piste = document.getElementById('carrouselPiste');
+    const diapos = piste.querySelectorAll('.carrousel-diapo');
+    const pointsContainer = document.getElementById('carrouselPoints');
+    let courant = 0;
+    let intervalleAuto;
+
+    // Créer les points
+    diapos.forEach((_, i) => {
+      const pt = document.createElement('button');
+      pt.className = 'carrousel-point' + (i === 0 ? ' actif' : '');
+      pt.setAttribute('aria-label', 'Image ' + (i + 1));
+      pt.setAttribute('role', 'tab');
+      pt.addEventListener('click', () => allerA(i));
+      pointsContainer.appendChild(pt);
+    });
+
+    function allerA(index) {
+      courant = (index + diapos.length) % diapos.length;
+      piste.style.transform = 'translateX(-' + (courant * 100) + '%)';
+      document.querySelectorAll('.carrousel-point').forEach((pt, i) => {
+        pt.classList.toggle('actif', i === courant);
+        pt.setAttribute('aria-selected', i === courant);
+      });
+    }
+
+    document.getElementById('carrouselPrev').addEventListener('click', () => {
+      allerA(courant - 1);
+      relancerAuto();
+    });
+    document.getElementById('carrouselNext').addEventListener('click', () => {
+      allerA(courant + 1);
+      relancerAuto();
+    });
+
+    function demarrerAuto() {
+      intervalleAuto = setInterval(() => allerA(courant + 1), 5000);
+    }
+    function relancerAuto() {
+      clearInterval(intervalleAuto);
+      demarrerAuto();
+    }
+
+    // Pause sur hover
+    piste.addEventListener('mouseenter', () => clearInterval(intervalleAuto));
+    piste.addEventListener('mouseleave', demarrerAuto);
+
+    // Touch/swipe
+    let touchStart = 0;
+    piste.addEventListener('touchstart', e => { touchStart = e.touches[0].clientX; }, { passive: true });
+    piste.addEventListener('touchend', e => {
+      const diff = touchStart - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        allerA(diff > 0 ? courant + 1 : courant - 1);
+        relancerAuto();
+      }
+    }, { passive: true });
+
+    // Démarrer carrousel
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!prefersReduced) demarrerAuto();
+
+    // ===== MENU MOBILE =====
+    const burger = document.getElementById('navBurger');
+    const navMobile = document.getElementById('navMobile');
+    const navClose = document.getElementById('navClose');
+
+    function ouvrirMenu() {
+      navMobile.classList.add('ouvert');
+      burger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function fermerMenu() {
+      navMobile.classList.remove('ouvert');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    burger.addEventListener('click', ouvrirMenu);
+    navClose.addEventListener('click', fermerMenu);
+
+    // Fermer sur Escape
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navMobile.classList.contains('ouvert')) fermerMenu();
+    });
+  </script>
+
+</body>
+</html>
